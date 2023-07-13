@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,25 +17,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="users")
+@Table(name="categories")
 @NoArgsConstructor
-@Setter
 @Getter
-public class User {
+@Setter
+public class Category {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
-	@Column(name="user_name",nullable=false)
-	private String name;
-	private String email;
-	private String password;
-	private String about;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer categoryId;
+	@Column(name="c_title")
+	private String categoryTitle;
+	@Column(name="c_description")
+	private String categoryDescription;
 	
-	@OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="category",cascade=CascadeType.ALL)
 	private List<Post> posts=new ArrayList<>();
-	
-	@OneToMany(mappedBy="user",cascade=CascadeType.ALL)
-	private List<Comment> comments=new ArrayList<>();
-
 }

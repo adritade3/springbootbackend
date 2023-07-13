@@ -14,7 +14,7 @@ import com.practice.blog.backend.repo.UserRepo;
 import com.practice.blog.backend.service.UserService;
 
 @Service
-public class userServiceImpl implements UserService{
+public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserRepo userRepo;

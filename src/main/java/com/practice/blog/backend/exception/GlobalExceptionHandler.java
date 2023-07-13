@@ -3,12 +3,17 @@ package com.practice.blog.backend.exception;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.practice.blog.backend.payload.ApiResponse;
 
@@ -33,5 +38,22 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
 		
 	}
+	
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public ResponseEntity<ApiResponse> methodNotSupportedException(HttpServletRequest request,HttpRequestMethodNotSupportedException e){		
+		String message=e.getMessage();
+		String link = ServletUriComponentsBuilder.fromCurrentRequest().toUriString();		
+		ApiResponse apiResponse=new ApiResponse(message + " "+link,false);
+		return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
+	}
 
+	@ExceptionHandler(MissingPathVariableException.class)
+	public ResponseEntity<ApiResponse> missingPathVariableException(HttpServletRequest request,MissingPathVariableException e){		
+		String message=e.getMessage();
+		String link = ServletUriComponentsBuilder.fromCurrentRequest().toUriString()+
+				" Please check the controller request mapping of the method";
+		
+		ApiResponse apiResponse=new ApiResponse(message + " "+link,false);
+		return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
+	}
 }
